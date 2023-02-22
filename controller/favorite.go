@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 type FavoriteActionResponse struct {
@@ -18,7 +16,7 @@ type FavoriteListResponse struct {
 	VideoList []service.VideoInfo `json:"video_list"`
 }
 
-func FavoriteAction(ctx context.Context, c *app.RequestContext) {
+func FavoriteAction(c *gin.Context) {
 	videoId, err := strconv.ParseInt(c.Query("video_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, FavoriteActionResponse{
@@ -80,7 +78,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	}
 }
 
-func FavoriteList(ctx context.Context, c *app.RequestContext) {
+func FavoriteList(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, FavoriteListResponse{

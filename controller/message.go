@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 type MessageActionResponse struct {
@@ -18,7 +16,7 @@ type QueryMessageResponse struct {
 	MessageList []service.MessageInfo `json:"message_list"`
 }
 
-func MessageAction(ctx context.Context, c *app.RequestContext) {
+func MessageAction(c *gin.Context) {
 	toUserId, err := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, MessageActionResponse{
@@ -59,7 +57,7 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	}
 }
 
-func MessageChat(ctx context.Context, c *app.RequestContext) {
+func MessageChat(c *gin.Context) {
 	toUserId, err := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, QueryMessageResponse{

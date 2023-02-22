@@ -5,8 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/cloudwego/hertz/pkg/app"
 )
@@ -22,6 +25,18 @@ func NewPublishFlow(dataArg *multipart.FileHeader, tokenArg, titleArg string) *P
 		data:  dataArg,
 		token: tokenArg,
 		title: titleArg,
+	}
+}
+
+func videoCompress(src, dst string) {
+	// using ffmpeg to compress video
+	args := []string{"-i", "./public/" + src,"-b:v", "1M", "-s", "640x360", "-r", "24", "./public/" + dst}
+	cmd := exec.Command("ffmpeg", args...)
+	if err := cmd.Run(); err != nil {
+		return
+	}
+	if err := os.Remove("./public/" + src); err != nil {
+		return
 	}
 }
 
@@ -42,12 +57,13 @@ func (pf *PublishFlow) packVideo() error {
 		return err
 	}
 	finalName := fmt.Sprintf("%d_%s", userId, filename)
-	dst := filepath.Join("./public/", finalName)
 	var c *app.RequestContext
-	if err := c.SaveUploadedFile(pf.data,dst); err != nil {
+	finalName = strings.Replace(finalName, " ", "_", -1)
+	if err := c.SaveUploadedFile(pf.data, "./public/"+finalName); err != nil {
 		return err
 	}
-	err = dao.NewVideoDaoInstance().InsertVideo(userId, "http://192.168.2.107:80/"+finalName, "https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg", pf.title)
+	go videoCompress(finalName, "compress_"+finalName)
+	err = dao.NewVideoDaoInstance().InsertVideo(userId, "http://101.34.36.126:8081/video/"+"compress_"+finalName, "https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg", pf.title)
 	if err != nil {
 		return err
 	}

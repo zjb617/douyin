@@ -14,7 +14,7 @@ func TestInsertVideo(t *testing.T) {
 		for i := 1; i < 2; i++ {
 			err := dao.NewVideoDaoInstance().InsertVideo(
 				int64(i),
-				"https://www.w3schools.com/html/movie.mp4",
+				"http://101.34.36.126:8081/video/bear.mp4",
 				"https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg",
 				fmt.Sprintf("testtitle%d", i),
 			)

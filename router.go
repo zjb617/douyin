@@ -2,13 +2,13 @@ package main
 
 import (
 	"douyin/controller"
-	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/gin-gonic/gin"
 )
 
-func registerRoute(h *server.Hertz) {
-	h.Static("/static", "./public")
+func registerRoute(r *gin.Engine) {
+	r.Static("/static", "./public")
 
-	apiRouter := h.Group("/douyin")
+	apiRouter := r.Group("/douyin")
 
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)

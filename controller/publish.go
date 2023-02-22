@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
 )
 
 type PublishResponse struct {
@@ -18,7 +16,7 @@ type PublishListResponse struct {
 	VideoList []service.VideoInfo `json:"video_list"`
 }
 
-func Publish(ctx context.Context, c *app.RequestContext) {
+func Publish(c *gin.Context) {
 	data, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, PublishResponse{
@@ -46,7 +44,7 @@ func Publish(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-func PublishList(ctx context.Context, c *app.RequestContext) {
+func PublishList(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, PublishListResponse{

@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 type RegisterResponse struct {
@@ -26,7 +24,7 @@ type UserInfoResponse struct {
 	User service.UserDetailInfo `json:"user"`
 }
 
-func Register(ctx context.Context, c *app.RequestContext) {
+func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 	info, err := service.Register(username, password)
@@ -50,7 +48,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-func Login(ctx context.Context, c *app.RequestContext) {
+func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 	info, err := service.Login(username, password)
@@ -74,7 +72,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-func UserInfo(ctx context.Context, c *app.RequestContext) {
+func UserInfo(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, UserInfoResponse{

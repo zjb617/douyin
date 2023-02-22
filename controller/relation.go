@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 type FollowActionResponse struct {
@@ -28,7 +26,7 @@ type FriendListResponse struct {
 	UserList []service.UserDetailInfo `json:"user_list"`
 }
 
-func FollowAction(ctx context.Context, c *app.RequestContext) {
+func FollowAction(c *gin.Context) {
 	toUserId, err := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 	actionType := c.Query("action_type") // 1: follow, 2: cancel follow
 	if err != nil {
@@ -90,7 +88,7 @@ func FollowAction(ctx context.Context, c *app.RequestContext) {
 	}
 }
 
-func FollowList(ctx context.Context, c *app.RequestContext) {
+func FollowList(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, FollowListResponse{
@@ -122,7 +120,7 @@ func FollowList(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-func FollowerList(ctx context.Context, c *app.RequestContext) {
+func FollowerList(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, FollowerListResponse{
@@ -154,7 +152,7 @@ func FollowerList(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-func FriendList(ctx context.Context, c *app.RequestContext) {
+func FriendList(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, FriendListResponse{

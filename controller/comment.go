@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"douyin/service"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
 )
 
 type CommentActionResponse struct {
@@ -19,7 +17,7 @@ type CommentListResponse struct {
 	CommentList []service.CommentInfo `json:"comment_list"`
 }
 
-func CommentAction(ctx context.Context, c *app.RequestContext) {
+func CommentAction(c *gin.Context) {
 	videoId, err := strconv.ParseInt(c.Query("video_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, CommentActionResponse{
@@ -92,7 +90,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	}
 }
 
-func CommentList(ctx context.Context, c *app.RequestContext) {
+func CommentList(c *gin.Context) {
 	videoId, err := strconv.ParseInt(c.Query("video_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, CommentListResponse{

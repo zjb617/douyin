@@ -1,14 +1,10 @@
 package controller
 
 import (
-	// "context"
-	"context"
 	"douyin/service"
 	"net/http"
 	"strconv"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	// "github.com/cloudwego/hertz/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 type FeedResponse struct {
@@ -17,7 +13,7 @@ type FeedResponse struct {
 	VideoList []service.VideoInfo `json:"video_list"`
 }
 
-func Feed(ctx context.Context, c *app.RequestContext) {
+func Feed(c *gin.Context) {
 	var latestTime int64
 	var err error
 	if temp := c.Query("latest_time"); temp == "0" {
